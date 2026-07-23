@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#C86B4A">
+  <meta name="description" content="Cuéntalo - Organizá tu despensa fácilmente">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Cuéntalo">
+
+  <title>Cuéntalo</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" type="image/svg+xml" href="assets/icons/icon-192x192.svg">
+  <link rel="apple-touch-icon" href="assets/icons/icon-192x192.svg">
+
+  <link rel="stylesheet" href="styles/variables.css">
+  <link rel="stylesheet" href="styles/base.css">
+  <link rel="stylesheet" href="styles/layout.css">
+  <link rel="stylesheet" href="styles/components.css">
+  <link rel="stylesheet" href="styles/scanner.css">
+</head>
+<body>
+  <div class="app">
+    <!-- Header -->
+    <header>
+      <div class="stamp"><span>HECHO<br>EN CASA</span></div>
+      <h1>Mira lo que hay<br>en la <em>despensa</em></h1>
+    </header>
+
+    <!-- Stats -->
+    <div class="stats">
+      <div class="stat">
+        <div class="stat-icon">🧺</div>
+        <div class="stat-num" id="stat-total">0</div>
+        <div class="stat-label">Productos</div>
+      </div>
+      <div class="stat">
+        <div class="stat-icon">⚠️</div>
+        <div class="stat-num" id="stat-low">0</div>
+        <div class="stat-label">Por acabarse</div>
+      </div>
+    </div>
+
+    <!-- CTA escanear -->
+    <div class="scan-cta" id="scan-cta">
+      <div class="icon-badge">📷</div>
+      <div>
+        <div class="txt-title">Escanear producto</div>
+        <div class="txt-sub">Agregalo rápido con el código de barras</div>
+      </div>
+    </div>
+
+    <!-- Pantalla Inicio -->
+    <div id="home-screen" class="screen active">
+      <div class="section-title">
+        <h2>En la despensa</h2>
+      </div>
+
+      <div class="filters">
+        <select id="filter-category" class="filter-select">
+          <option value="">Todas las categorías</option>
+          <option value="Lácteos">Lácteos</option>
+          <option value="Carnes">Carnes</option>
+          <option value="Verduras">Verduras</option>
+          <option value="Frutas">Frutas</option>
+          <option value="Panadería">Panadería</option>
+          <option value="Bebidas">Bebidas</option>
+          <option value="Limpieza">Limpieza</option>
+          <option value="Otros">Otros</option>
+        </select>
+        <select id="filter-expiry" class="filter-select">
+          <option value="">Ordenar por vencimiento</option>
+          <option value="soon">Próximos a vencer</option>
+          <option value="far">Más lejanos</option>
+          <option value="none">Sin fecha</option>
+        </select>
+      </div>
+
+      <div id="products-list" class="list">
+        <!-- Productos renderizados dinámicamente -->
+      </div>
+    </div>
+
+    <!-- Pantalla Buscar -->
+    <div id="search-screen" class="screen">
+      <div class="section-title">
+        <h2>Buscar</h2>
+      </div>
+      <div class="search-box">
+        <input type="text" id="search-input" class="search-input" placeholder="Buscar producto...">
+      </div>
+      <div id="search-results" class="list">
+        <!-- Resultados de búsqueda -->
+      </div>
+    </div>
+
+    <!-- Nav inferior -->
+    <nav>
+      <div class="nav-item active" data-screen="home">
+        <div class="nav-circle">🏠</div>
+        Inicio
+      </div>
+      <div class="nav-item" data-screen="search">
+        <div class="nav-circle">🔍</div>
+        Buscar
+      </div>
+      <div class="nav-add" id="fab-add">
+        <div class="fab">+</div>
+        <span>Agregar</span>
+      </div>
+    </nav>
+  </div>
+
+  <!-- Toast -->
+  <div id="toast" class="toast">
+    <span id="toast-message"></span>
+  </div>
+
+  <!-- Modal agregar producto -->
+  <div id="modal-overlay" class="modal-overlay">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+      <div class="modal__header">
+        <h2 id="modal-title" class="modal__title">Agregar producto</h2>
+        <button id="modal-close" class="modal__close" aria-label="Cerrar">&times;</button>
+      </div>
+
+      <button type="button" id="btn-scan" class="btn btn--scan">
+        📷 Escanear código de barras
+      </button>
+
+      <form id="product-form">
+        <div class="form-group">
+          <label class="form-label" for="product-name">Nombre</label>
+          <input type="text" id="product-name" class="form-input" placeholder="Ej: Leche entera" required>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="product-brand">Marca</label>
+          <input type="text" id="product-brand" class="form-input" placeholder="Ej: La Serenísima">
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="product-qty">Cantidad</label>
+            <input type="number" id="product-qty" class="form-input" min="0" value="1" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="product-category">Categoría</label>
+            <select id="product-category" class="form-select" required>
+              <option value="">Seleccionar</option>
+              <option value="Lácteos">Lácteos</option>
+              <option value="Carnes">Carnes</option>
+              <option value="Verduras">Verduras</option>
+              <option value="Frutas">Frutas</option>
+              <option value="Panadería">Panadería</option>
+              <option value="Bebidas">Bebidas</option>
+              <option value="Limpieza">Limpieza</option>
+              <option value="Otros">Otros</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="product-expiry">Fecha de vencimiento</label>
+          <input type="date" id="product-expiry" class="form-input">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="product-barcode">Código de barras</label>
+          <input type="text" id="product-barcode" class="form-input" placeholder="Ej: 7791234567890">
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="btn btn--primary">Guardar producto</button>
+          <button type="button" id="btn-cancel" class="btn btn--secondary">Cancelar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Escáner de código de barras -->
+  <div id="scanner-overlay" class="scanner-overlay">
+    <div class="scanner__header">
+      <h3 class="scanner__title">Escanear código</h3>
+      <button id="scanner-close" class="scanner__close" aria-label="Cerrar escáner">&times;</button>
+    </div>
+    <div class="scanner__viewport">
+      <div id="scanner-container"></div>
+      <div class="scanner__frame"></div>
+    </div>
+    <div class="scanner__footer">
+      <button id="scanner-manual" class="scanner__manual">Ingresar código manualmente</button>
+      <p class="scanner__hint">Centrá el código de barras dentro del recuadro</p>
+    </div>
+  </div>
+
+  <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/scanner.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,25 @@
+:root {
+  --cloth: #F4E4D3;
+  --cloth-deep: #EAD3B8;
+  --card: #FFFBF5;
+  --ink: #4A3428;
+  --ink-soft: #8C7261;
+  --terracotta: #C86B4A;
+  --terracotta-deep: #B0552F;
+  --sage: #7C9070;
+  --sage-bg: #EAF0E4;
+  --honey: #E8A94C;
+  --tomato: #D6674A;
+  --tomato-bg: #FBE9E3;
+  --line: #E8D5BE;
+  --shadow: rgba(74, 52, 40, 0.12);
+  --shadow-soft: rgba(74, 52, 40, 0.06);
+  --radius-sm: 10px;
+  --radius-md: 14px;
+  --radius-lg: 18px;
+  --radius-xl: 20px;
+  --font-heading: 'Fraunces', serif;
+  --font-body: 'Nunito', sans-serif;
+  --header-height: auto;
+  --nav-height: 76px;
+}
