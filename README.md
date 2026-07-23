@@ -2,8 +2,6 @@
 
 **Cuéntalo** es una Progressive Web App (PWA) para llevar el control de los productos de tu despensa desde el celular. Puedes agregar productos manualmente o escaneando el código de barras, modificar cantidades, filtrar por categoría y fecha de vencimiento, y mucho más.
 
-> 🚀 Demo: [https://cuentalo-app.vercel.app](https://cuentalo-app.vercel.app)
-
 ---
 
 ## ✨ Características
